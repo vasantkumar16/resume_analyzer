@@ -1,5 +1,5 @@
 
-# AI Resume Analyzer
+# Resume Analyzer
 
 An AI-powered web application that analyzes resumes against job descriptions using Retrieval-Augmented Generation (RAG), semantic embeddings, and Google Gemini.
 
