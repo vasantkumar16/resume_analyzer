@@ -1,293 +1,162 @@
 
 # AI Resume Analyzer
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.11%2B-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Flask-Web%20Application-black?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
-  <img src="https://img.shields.io/badge/Google%20Gemini-Generative%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google Gemini">
-  <img src="https://img.shields.io/badge/ChromaDB-Vector%20Database-orange?style=for-the-badge" alt="ChromaDB">
-  <img src="https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite">
-</p>
+An AI-powered web application that analyzes resumes against job descriptions using Retrieval-Augmented Generation (RAG), semantic embeddings, and Google Gemini.
 
-<p align="center">
-  <b>An AI-powered resume analysis and recruitment assistance platform built with Flask, Google Gemini, ChromaDB, and SQLite.</b>
-</p>
-
-<p align="center">
-  Upload a resume, provide a job description, and receive an AI-generated analysis of skills, strengths, weaknesses, and job compatibility.
-</p>
+The system helps applicants understand how well their resume matches a job description and helps recruiters analyze and compare multiple candidates for a job role.
 
 ---
 
 ## 📌 Project Overview
 
-The **AI Resume Analyzer** is a web-based application designed to help job seekers and recruiters evaluate resumes against job descriptions using Generative AI and semantic search.
+The **AI Resume Analyzer** is a Flask-based web application designed to simplify the resume screening and job-matching process.
 
-Traditional resume screening can be time-consuming, especially when candidates need to compare their skills and projects with different job requirements.
+Instead of relying only on traditional keyword matching, the application uses semantic search and RAG to understand the meaning and context of information present in resumes and job descriptions.
 
-This project addresses that challenge by combining:
+The application supports two types of users:
 
-- Resume text extraction
-- Semantic text chunking
-- AI-powered embeddings
-- ChromaDB vector search
-- Google Gemini-based resume analysis
-- Match score generation
-- Applicant analysis history
-- Recruiter job posting and candidate screening
-
-The application provides two main user roles:
-
-1. **Applicant** – Upload a resume and analyze it against a job description.
-2. **Recruiter** – Create job postings and analyze multiple candidate resumes.
+- 👤 **Applicant**
+- 🧑‍💼 **Recruiter**
 
 ---
 
-## 🎯 Project Objectives
-
-The main objectives of this project are:
-
-- To automate basic resume-to-job-description comparison.
-- To identify relevant skills present in a candidate's resume.
-- To identify important job requirements not supported by the resume.
-- To generate an overall resume match score.
-- To provide concise AI-generated resume feedback.
-- To support semantic retrieval of relevant resume content.
-- To maintain analysis history using a relational database.
-- To provide a foundation for AI-assisted recruitment workflows.
-
----
-
-## ✨ Key Features
+## ✨ Features
 
 ### 👤 Applicant Features
 
-- Applicant registration and login.
-- Secure password hashing.
-- Resume upload support.
-- PDF and DOCX resume extraction.
-- Job description input.
-- AI-powered resume analysis.
-- Overall match score from 0–100.
-- Matching skills identification.
-- Missing skills identification.
-- Resume strengths and weaknesses.
-- Professional AI-generated summary.
-- Saved analysis history.
-- Cached results for repeated resume/job combinations.
-
-### 🏢 Recruiter Features
-
-- Recruiter registration and login.
-- Recruiter dashboard.
-- Create job postings.
-- Store job descriptions.
-- Open and close job postings.
-- Upload multiple candidate resumes.
-- Analyze candidates against a job description.
-- Configure a shortlist cutoff score.
-- Automatically classify candidates as:
-  - SHORTLISTED
-  - REJECTED
-- Rank candidates by match score.
-- View recruitment history.
-- View candidate analysis details.
-
-### 🤖 AI & Semantic Search Features
-
-- Google Gemini API integration.
-- Gemini embedding generation.
-- ChromaDB persistent vector storage.
-- Semantic resume chunk retrieval.
-- Section-aware resume processing.
-- Structured JSON AI responses.
-- Match score normalization.
-- Basic Gemini quota/rate-limit retry handling.
-
-### 🔐 Security & Data Features
-
-- Environment-variable API key configuration.
-- `.env` excluded from Git tracking.
-- Password hashing using Werkzeug.
-- Session-based authentication.
-- Applicant/recruiter role protection.
-- User-specific analysis history.
-- Recruiter-specific job and recruitment history.
-- File hashing for duplicate analysis detection.
+- Applicant registration and login
+- Secure password-based authentication
+- Upload resume in **PDF** or **DOCX** format
+- Enter a job description
+- AI-powered resume analysis
+- Resume-to-job match score
+- Matching skills identification
+- Missing skills identification
+- Strengths and weaknesses analysis
+- AI-generated resume summary
+- Analysis history
+- Previous analysis retrieval
+- Duplicate analysis detection
 
 ---
 
-## 🧠 How the Application Works
+### 🧑‍💼 Recruiter Features
 
-The application follows a Retrieval-Augmented Generation (RAG)-inspired workflow.
+- Recruiter registration and login
+- Recruiter dashboard
+- Create job postings
+- Add job title, company, location, employment type, and job description
+- Upload multiple candidate resumes
+- Analyze multiple candidates against a job
+- Generate AI-based candidate match scores
+- Identify matching skills
+- Identify missing skills
+- View candidate strengths and weaknesses
+- View candidate summaries
+- Set a cutoff score
+- Review candidates based on the cutoff
+- Maintain recruitment history
+- View previous recruitment sessions
 
-Instead of sending the complete extracted resume directly to the AI, the application:
+---
 
-1. Extracts text from the uploaded resume.
-2. Divides the resume into meaningful sections.
-3. Splits sections into smaller chunks.
-4. Generates embeddings for the chunks.
-5. Stores the embeddings in ChromaDB.
-6. Uses the job description as the semantic search query.
-7. Retrieves the most relevant resume chunks.
-8. Sends the job description and retrieved resume evidence to Gemini.
-9. Receives a structured analysis.
-10. Displays and stores the result.
+## 🤖 AI and RAG Features
 
-### 🔄 Resume Analysis Workflow
+The application uses a **Retrieval-Augmented Generation (RAG)** approach for resume analysis.
+
+The basic workflow is:
 
 ```text
-                    ┌──────────────────────┐
-                    │      User Uploads    │
-                    │   Resume + Job JD     │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │   Flask Web App      │
-                    │   Input Validation   │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │  Resume Extraction   │
-                    │      PDF / DOCX      │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │  Semantic Chunking   │
-                    │  Section Detection   │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │ Gemini Embeddings    │
-                    │ gemini-embedding-001  │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │      ChromaDB        │
-                    │   Vector Storage     │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │ Semantic Retrieval   │
-                    │ Relevant Resume Text │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │    Google Gemini     │
-                    │ Resume + JD Analysis │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │ Structured Analysis  │
-                    │ Score, Skills, etc.  │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │    SQLite Database   │
-                    │    Saved History     │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │   Results Dashboard  │
-                    └──────────────────────┘
+Resume
+   ↓
+Text Extraction
+   ↓
+Section Detection
+   ↓
+Semantic Chunking
+   ↓
+Gemini Embeddings
+   ↓
+ChromaDB
+   ↓
+Semantic Retrieval
+   ↓
+Relevant Resume Chunks
+   ↓
+Google Gemini
+   ↓
+Resume Analysis
 ```
 
----
+The system retrieves the most relevant parts of the resume before sending the information to the AI model.
 
-## 🛠️ Technology Stack
-
-| Technology | Purpose |
-|------------|---------|
-| Python | Core programming language |
-| Flask | Web application framework |
-| Flask-SQLAlchemy | Database ORM |
-| SQLite | Relational database |
-| Google Gemini API | AI-powered resume analysis |
-| Gemini Embeddings | Resume semantic embeddings |
-| ChromaDB | Persistent vector database |
-| PyMuPDF | PDF text extraction |
-| python-docx | DOCX text extraction |
-| LangChain Text Splitters | Resume text chunking |
-| Werkzeug | Password hashing and file security |
-| python-dotenv | Environment variable management |
-| HTML5 | Frontend structure |
-| CSS3 | Frontend styling |
-| Jinja2 | Dynamic HTML templates |
+This allows the model to focus on the sections of the resume that are most relevant to the job description.
 
 ---
 
-## 🏗️ System Architecture
+## 🧠 Why RAG?
 
-The application follows a modular Flask architecture.
+Traditional resume screening systems often depend heavily on exact keyword matching.
+
+For example:
+
+**Job Description:**
 
 ```text
-                         ┌─────────────────────┐
-                         │      Frontend       │
-                         │ HTML + CSS + Jinja2  │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │     Flask App       │
-                         │      app.py         │
-                         └───────┬─────┬───────┘
-                                 │     │
-                ┌────────────────┘     └────────────────┐
-                ▼                                       ▼
-      ┌───────────────────┐                  ┌───────────────────┐
-      │ Applicant Module  │                  │ Recruiter Module  │
-      │ Resume Analysis   │                  │ Job Screening     │
-      └─────────┬─────────┘                  └─────────┬─────────┘
-                │                                      │
-                └────────────────┬─────────────────────┘
-                                 ▼
-                       ┌───────────────────┐
-                       │  Resume Services  │
-                       │ Extraction        │
-                       │ Chunking          │
-                       │ Embeddings        │
-                       │ Vector Retrieval  │
-                       └─────────┬─────────┘
-                                 │
-                ┌────────────────┴────────────────┐
-                ▼                                 ▼
-       ┌──────────────────┐              ┌──────────────────┐
-       │ Google Gemini    │              │    ChromaDB      │
-       │ AI Analysis      │              │ Vector Storage   │
-       └──────────────────┘              └──────────────────┘
-                                 │
-                                 ▼
-                       ┌───────────────────┐
-                       │    SQLite DB      │
-                       │ Users             │
-                       │ Job Postings      │
-                       │ Analysis History  │
-                       │ Candidate Results │
-                       └───────────────────┘
+Experience in developing predictive models.
 ```
 
----
-
-## 📂 Project Structure
+**Resume:**
 
 ```text
-Resume_Analyzer_Final/
+Developed machine learning models for classification and prediction.
+```
+
+A simple keyword-based system may not fully understand that these two statements are related.
+
+With semantic embeddings, the application can identify content based on **meaning and context**, not just exact words.
+
+RAG helps the system:
+
+- Retrieve relevant resume information
+- Reduce unnecessary information sent to the AI model
+- Improve contextual understanding
+- Provide analysis based on actual resume content
+- Compare resumes and job descriptions more intelligently
+
+---
+
+# 🛠️ Technology Stack
+
+| Category | Technology |
+|----------|------------|
+| Programming Language | Python |
+| Backend | Flask |
+| Frontend | HTML, CSS, Jinja2 |
+| Database | SQLite |
+| ORM | Flask-SQLAlchemy |
+| AI Model | Google Gemini |
+| Embeddings | Gemini Embeddings |
+| Vector Database | ChromaDB |
+| Text Processing | LangChain |
+| PDF Processing | PyMuPDF |
+| DOCX Processing | python-docx |
+| Authentication | Flask Sessions |
+| Password Security | Werkzeug |
+| Environment Variables | python-dotenv |
+
+---
+
+# 📂 Project Structure
+
+```text
+AI-Resume-Analyzer/
 │
 ├── app.py
 ├── config.py
 ├── database.py
 ├── requirements.txt
-├── .env.example
+├── .env
 ├── .gitignore
 ├── README.md
 │
@@ -305,6 +174,10 @@ Resume_Analyzer_Final/
 │   ├── section_chunker.py
 │   ├── vector_store.py
 │   └── email_service.py
+│
+├── utils/
+│   ├── hash_utils.py
+│   └── timezone.py
 │
 ├── templates/
 │   ├── base.html
@@ -324,352 +197,343 @@ Resume_Analyzer_Final/
 │   └── style.css
 │
 ├── uploads/
-│   └── .gitkeep
+│   └── resumes/
 │
 ├── chroma_db/
-│   └── .gitkeep
 │
 └── instance/
-    └── .gitkeep
+    └── resume_analyzer.db
 ```
 
-> **Note:** The structure above represents the main application modules. Your uploaded project also contains runtime-generated database files, ChromaDB files, and Python cache folders. These should remain excluded from Git.
+> Update the project structure if your actual GitHub repository uses different file or folder names.
 
 ---
 
-## 🔍 Detailed Module Explanation
+# 🔄 Application Workflow
 
-### 1. `app.py`
-
-The main Flask application file.
-
-Responsibilities:
-
-- Application initialization.
-- Flask configuration loading.
-- Database initialization.
-- User registration and login.
-- Role-based access control.
-- Resume upload handling.
-- Applicant analysis.
-- Recruiter job posting.
-- Multi-resume candidate analysis.
-- Recruitment history.
-- Results rendering.
-
-Important routes include:
+## Applicant Workflow
 
 ```text
-/
-```
-
-Application landing page.
-
-```text
-/register/applicant
-/register/recruiter
-```
-
-Applicant and recruiter registration.
-
-```text
-/login/applicant
-/login/recruiter
-```
-
-Role-specific login.
-
-```text
-/applicant/dashboard
-```
-
-Applicant resume analysis dashboard.
-
-```text
-/applicant/history
-```
-
-Applicant analysis history.
-
-```text
-/recruiter/dashboard
-```
-
-Recruiter dashboard.
-
-```text
-/recruiter/jobs/create
-```
-
-Create a job posting.
-
-```text
-/recruiter/jobs/<job_id>/analyze
-```
-
-Analyze multiple candidate resumes.
-
-```text
-/recruiter/history
-```
-
-Recruitment history.
-
----
-
-### 2. `config.py`
-
-Stores application configuration.
-
-Current configuration includes:
-
-- Flask secret key.
-- SQLite database URI.
-- SQLAlchemy tracking configuration.
-- Resume upload folder.
-
-Example:
-
-```python
-class Config:
-    SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret")
-    SQLALCHEMY_DATABASE_URI = "sqlite:///resume_analyzer.db"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    UPLOAD_FOLDER = "uploads/resumes"
+Applicant Registration
+        ↓
+Applicant Login
+        ↓
+Upload Resume
+        ↓
+Enter Job Description
+        ↓
+Extract Resume Text
+        ↓
+Create Resume Chunks
+        ↓
+Generate Embeddings
+        ↓
+Store in ChromaDB
+        ↓
+Retrieve Relevant Chunks
+        ↓
+Google Gemini Analysis
+        ↓
+Display Results
+        ↓
+Save Analysis History
 ```
 
 ---
 
-### 3. `database.py`
+## Recruiter Workflow
 
-Initializes Flask-SQLAlchemy.
-
-```python
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-```
-
-The database object is imported by the model files.
-
----
-
-### 4. `services/resume_extractor.py`
-
-Extracts text from supported resume files.
-
-Supported formats:
-
-- PDF
-- DOCX
-
-Libraries used:
-
-- PyMuPDF (`fitz`)
-- python-docx
-
-Example:
-
-```python
-def extract_resume_text(path):
-    if path.lower().endswith(".pdf"):
-        doc = fitz.open(path)
-        text = "\n".join(page.get_text() for page in doc)
-        doc.close()
-        return text
-
-    if path.lower().endswith(".docx"):
-        doc = Document(path)
-        return "\n".join(
-            p.text for p in doc.paragraphs if p.text.strip()
-        )
-
-    raise ValueError("Only PDF and DOCX files are supported.")
+```text
+Recruiter Registration
+        ↓
+Recruiter Login
+        ↓
+Create Job Posting
+        ↓
+Enter Job Description
+        ↓
+Upload Multiple Resumes
+        ↓
+Process Candidate Resumes
+        ↓
+Generate Embeddings
+        ↓
+Semantic Retrieval
+        ↓
+Google Gemini Analysis
+        ↓
+Generate Candidate Scores
+        ↓
+Apply Cutoff Score
+        ↓
+Review Candidate Results
+        ↓
+Save Recruitment History
 ```
 
 ---
 
-### 5. `services/section_chunker.py`
+# 📄 Resume Processing
 
-Converts extracted resume text into semantic chunks.
+The application supports the following resume formats:
 
-The system identifies common resume sections such as:
+```text
+PDF
+DOCX
+```
+
+### PDF
+
+PDF resume text is extracted using:
+
+```text
+PyMuPDF
+```
+
+### DOCX
+
+DOCX resume text is extracted using:
+
+```text
+python-docx
+```
+
+After extracting the text, the application processes the content and identifies different resume sections.
+
+Common sections include:
 
 - Summary
+- Profile
+- Objective
 - Skills
+- Technical Skills
 - Experience
+- Internship
 - Projects
 - Education
 - Certifications
 - Achievements
 
-The project uses `RecursiveCharacterTextSplitter` with:
+---
 
-```text
-Chunk size: 800 characters
-Chunk overlap: 100 characters
-```
+# ✂️ Semantic Chunking
 
-Each chunk stores:
+Large resume text is divided into smaller chunks before generating embeddings.
+
+The application uses a recursive text splitter.
+
+Example configuration:
 
 ```python
-{
-    "section": "skills",
-    "content": "Extracted resume content..."
-}
+chunk_size = 800
+chunk_overlap = 100
 ```
 
-This helps preserve section context during semantic retrieval.
+### Why Chunking?
+
+A complete resume can contain a large amount of information.
+
+Instead of embedding the entire resume as one large piece, it is divided into smaller meaningful sections.
+
+For example:
+
+```text
+Resume
+│
+├── Summary
+├── Skills
+├── Experience
+├── Projects
+├── Education
+└── Certifications
+```
+
+Each chunk can then be searched independently.
+
+### Chunk Metadata
+
+Each chunk can contain information such as:
+
+```text
+resume_id
+candidate_name
+section
+content
+embedding
+```
+
+This allows the application to identify where retrieved information came from.
 
 ---
 
-### 6. `services/embedding_service.py`
+# 🔎 Semantic Search
 
-Generates vector embeddings for resume content using Gemini.
+After resume chunks are stored in ChromaDB, the application performs semantic retrieval.
 
-Configured embedding model:
+The job description is used to identify the most relevant resume chunks.
+
+For example:
 
 ```text
-gemini-embedding-001
+Job Requirement:
+Python + Machine Learning + SQL
 ```
+
+The system searches the vector database for resume sections that are semantically related to these requirements.
+
+The retrieved chunks are then provided to the Gemini model for analysis.
+
+---
+
+# 🗄️ ChromaDB
+
+The application uses **ChromaDB** as the vector database.
+
+ChromaDB stores:
+
+- Resume chunks
+- Embeddings
+- Resume IDs
+- Candidate information
+- Section metadata
 
 Example:
 
-```python
-def get_embedding(text):
-    response = client.models.embed_content(
-        model="gemini-embedding-001",
-        contents=text
-    )
-
-    return response.embeddings[0].values
+```text
+Resume Chunk
+     ↓
+Embedding
+     ↓
+ChromaDB
+     ↓
+Semantic Search
+     ↓
+Relevant Resume Content
 ```
 
-Embeddings convert text into numerical vectors that can be compared for semantic similarity.
+The local vector database is stored in:
+
+```text
+chroma_db/
+```
 
 ---
 
-### 7. `services/vector_store.py`
+# 🤖 AI Analysis
 
-Manages ChromaDB.
+Google Gemini is used to analyze the retrieved resume content against the job description.
 
-The project uses a persistent ChromaDB client:
+The analysis can include:
 
-```python
-client = chromadb.PersistentClient(path="chroma_db")
-```
+- Overall match score
+- Matching skills
+- Missing skills
+- Strengths
+- Weaknesses
+- Summary
 
-Collection:
-
-```text
-resume_collection
-```
-
-Main operations:
-
-#### Store resume chunks
-
-```python
-store_resume_chunks(
-    resume_id,
-    candidate_name,
-    chunks
-)
-```
-
-#### Retrieve relevant resume chunks
-
-```python
-retrieve_resume_chunks(
-    resume_id,
-    query,
-    n_results=10
-)
-```
-
-The query is the job description.
-
-The vector store returns relevant resume content and section metadata.
-
----
-
-### 8. `services/resume_analyzer.py`
-
-This module performs the main AI analysis.
-
-Configured generation model in the uploaded source:
-
-```text
-gemini-3.5-flash-lite
-```
-
-The analysis process:
-
-1. Retrieve relevant resume chunks.
-2. Combine them into resume evidence.
-3. Build a structured analysis prompt.
-4. Send the prompt to Gemini.
-5. Parse the JSON response.
-6. Normalize the match score.
-7. Return the analysis.
-
-Expected output:
+Example response:
 
 ```json
 {
-  "overall_score": 0,
-  "matching_skills": [],
-  "missing_skills": [],
-  "summary": "",
-  "strengths": [],
-  "weaknesses": []
+    "overall_score": 82.5,
+    "matching_skills": [
+        "Python",
+        "Machine Learning",
+        "SQL"
+    ],
+    "missing_skills": [
+        "Docker",
+        "AWS"
+    ],
+    "summary": "The candidate has a strong foundation in Python and machine learning and matches several core requirements of the role.",
+    "strengths": [
+        "Strong Python knowledge",
+        "Relevant machine learning projects"
+    ],
+    "weaknesses": [
+        "Limited cloud experience"
+    ]
 }
 ```
 
-The prompt instructs Gemini to:
+---
 
-- Use only resume evidence.
-- Avoid inventing qualifications.
-- Compare skills, experience, projects, education, and technologies.
-- Return a score from 0 to 100.
-- Return valid JSON.
+# 🔐 Authentication
+
+The application provides separate authentication for:
+
+```text
+Applicant
+Recruiter
+```
+
+User passwords are not stored directly.
+
+Instead, passwords are securely hashed using **Werkzeug password hashing**.
+
+The application also uses Flask sessions to maintain logged-in users.
+
+Role-based access prevents applicants from accessing recruiter-specific functionality.
 
 ---
 
-### 9. `models/user.py`
+# ♻️ Duplicate Analysis Detection
 
-Stores registered users.
+The application uses hashing to avoid unnecessary repeated AI analysis.
 
-Fields:
+Hashes can be generated for:
 
-| Field | Description |
-|------|-------------|
-| id | Primary key |
-| username | User name |
-| email | Unique email |
-| password_hash | Hashed password |
-| role | Applicant or recruiter |
-
-Passwords are hashed using Werkzeug.
-
-```python
-user.set_password(password)
+```text
+Resume
+Job Description
 ```
 
-Password verification:
+The application can check whether the same resume has already been analyzed for the same job description.
 
-```python
-user.check_password(password)
+Conceptually:
+
+```text
+Resume Hash
+     +
+Job Description Hash
+     ↓
+Check Database
+     ↓
+Already Exists?
+    /       \
+  Yes        No
+  ↓           ↓
+Reuse       Analyze
+Result      Using AI
 ```
+
+This helps reduce unnecessary API requests and saves processing time.
 
 ---
 
-### 10. `models/job_posting.py`
+# 🗃️ Database Models
 
-Stores recruiter job postings.
+The application uses **SQLite** with **Flask-SQLAlchemy**.
 
-Fields include:
+## User
 
+Stores user information such as:
+
+- User ID
+- Name
+- Email
+- Password hash
+- Role
+
+---
+
+## JobPosting
+
+Stores recruiter job information such as:
+
+- Job ID
+- Recruiter ID
 - Job title
 - Company
 - Location
@@ -677,687 +541,394 @@ Fields include:
 - Job description
 - Job hash
 - Job status
-- Creation timestamp
-
-Supported statuses:
-
-```text
-OPEN
-CLOSED
-```
 
 ---
 
-### 11. `models/analysis_history.py`
+## AnalysisHistory
 
-Stores applicant resume analysis history.
+Stores applicant resume analysis information.
 
-Stored information includes:
+It can contain:
 
-- User ID
-- Resume filename
-- Resume hash
-- Job hash
+- Resume information
 - Job description
 - Match score
 - Matching skills
 - Missing skills
-- Summary
 - Strengths
 - Weaknesses
-- Creation timestamp
-
-A unique constraint prevents duplicate analysis records for the same user, resume, and job description combination.
+- Summary
+- Analysis timestamp
 
 ---
 
-### 12. `models/recruitment_history.py`
+## RecruitmentSession
 
-Contains:
+Stores information about a recruiter's candidate analysis session.
 
-#### RecruitmentSession
+It can contain:
 
-Stores:
-
-- Recruiter ID
-- Job ID
+- Recruiter
+- Job
 - Job title
 - Job description
-- Job hash
 - Cutoff score
-- Creation time
+- Session information
 
-#### CandidateResult
+---
 
-Stores:
+## CandidateResult
 
-- Candidate name
-- Resume hash
-- Job hash
+Stores individual candidate results for a recruitment session.
+
+It can contain:
+
+- Candidate information
+- Resume information
 - Match score
-- Candidate status
 - Matching skills
 - Missing skills
-- Summary
 - Strengths
 - Weaknesses
+- Summary
+- Selection status
 
 ---
 
-## 🧮 Resume Match Score
+# ⚙️ Installation
 
-The application generates an overall match score between 0 and 100 using Gemini.
-
-The score is normalized in the application:
-
-```python
-score = max(0.0, min(100.0, score))
-```
-
-### Score Interpretation
-
-| Score Range | General Interpretation |
-|-------------|------------------------|
-| 80–100 | Strong alignment |
-| 60–79 | Moderate to strong alignment |
-| 40–59 | Partial alignment |
-| 0–39 | Low alignment |
-
-> These ranges are illustrative interpretations for understanding the result. They are not scientifically validated hiring thresholds.
-
-### Recruiter Cutoff
-
-Recruiters can configure a cutoff score.
-
-Example:
-
-```text
-Cutoff score: 60
-```
-
-Candidates are classified as:
-
-```text
-Score >= 60 → SHORTLISTED
-Score < 60  → REJECTED
-```
-
-The cutoff can be adjusted between 0 and 100.
-
----
-
-## 🔐 Security Implementation
-
-The project includes several security-related practices.
-
-### Environment Variables
-
-The Gemini API key is loaded using `python-dotenv`.
-
-Example:
-
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-SECRET_KEY=your_secret_key
-```
-
-### Password Hashing
-
-Passwords are not stored as plain text.
-
-Werkzeug password hashing is used:
-
-```python
-generate_password_hash()
-check_password_hash()
-```
-
-### Role-Based Authentication
-
-Applicants and recruiters have separate protected routes.
-
-The application checks:
-
-- User login status.
-- Session user ID.
-- Session role.
-- Database user validity.
-
-### File Validation
-
-The application allows:
-
-```text
-.pdf
-.docx
-```
-
-Files are saved using secure filenames and unique generated names.
-
-### Git Protection
-
-Sensitive and generated files are excluded through `.gitignore`.
-
-Excluded examples:
-
-```text
-.env
-__pycache__/
-*.pyc
-instance/*.db
-uploads/*
-chroma_db/*
-```
-
----
-
-## ⚙️ Installation & Setup
-
-Follow the steps below to run the project locally.
-
-### Prerequisites
-
-Install the following:
-
-- Python 3.11 or newer.
-- Git.
-- A Google Gemini API key.
-- A Windows, Linux, or macOS environment.
-
-Python 3.11 is recommended for this project because it is a stable Python version with broad library compatibility.
-
----
-
-### Step 1: Clone the Repository
+## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/resume_analyzer.git
+git clone https://github.com/YOUR-GITHUB-USERNAME/AI-Resume-Analyzer.git
 ```
 
-Move into the project folder:
+Move into the project directory:
 
 ```bash
-cd resume_analyzer
+cd AI-Resume-Analyzer
 ```
-
-> Replace `YOUR_USERNAME` with your actual GitHub username.
 
 ---
 
-### Step 2: Create a Virtual Environment
+## 2. Create a Virtual Environment
 
-Windows PowerShell:
+For Windows:
 
-```powershell
+```bash
 python -m venv venv
 ```
 
-Activate the virtual environment:
+Activate the environment:
+
+```bash
+venv\Scripts\activate
+```
+
+For PowerShell:
 
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-If PowerShell blocks activation, you can use Command Prompt:
-
-```cmd
-venv\Scripts\activate
-```
-
-Linux/macOS:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
 ---
 
-### Step 3: Install Dependencies
+## 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-The project dependencies include:
-
-```text
-Flask
-Flask-SQLAlchemy
-Werkzeug
-python-dotenv
-PyMuPDF
-python-docx
-chromadb
-google-genai
-langchain
-langchain-core
-langchain-text-splitters
-pydantic
-langchain-community
-```
-
 ---
 
-### Step 4: Configure Environment Variables
+# 🔑 Environment Variables
 
-Create a `.env` file in the project root.
+Create a `.env` file in the root directory.
 
-Copy the example file:
-
-Windows:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Linux/macOS:
-
-```bash
-cp .env.example .env
-```
-
-Open `.env` and configure:
+Example:
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_API_KEY=your_gemini_api_key
 SECRET_KEY=your_secret_key
 ```
 
-### Get a Gemini API Key
+### GEMINI_API_KEY
 
-You can obtain a Gemini API key from Google AI Studio:
+This is the API key used to access Google Gemini services.
 
-https://aistudio.google.com/
+### SECRET_KEY
 
-Never commit your actual API key to GitHub.
+The Flask secret key is used for securely signing session-related data.
+
+Example:
+
+```env
+SECRET_KEY=my-secure-secret-key
+```
+
+**Do not publish your actual API key or secret key on GitHub.**
+
+Add `.env` to `.gitignore`:
+
+```text
+.env
+```
 
 ---
 
-### Step 5: Run the Application
+# ▶️ Running the Application
+
+After activating the virtual environment, run:
 
 ```bash
 python app.py
 ```
 
-The Flask application will start in development mode.
-
-Open your browser and visit:
+The Flask application will normally be available at:
 
 ```text
 http://127.0.0.1:5000
 ```
 
+Open the address in your browser.
+
 ---
 
-## 🖥️ Application Usage
+# 👤 Applicant Usage
 
-### Applicant Workflow
-
-```text
 1. Open the application.
-2. Register as an applicant.
-3. Login.
-4. Upload a PDF or DOCX resume.
-5. Enter the target job description.
-6. Submit for analysis.
-7. View the match score.
-8. Review matching skills.
-9. Review missing skills.
-10. Read strengths and weaknesses.
-11. View saved analysis history.
-```
+2. Select **Applicant**.
+3. Register an account.
+4. Log in.
+5. Upload a PDF or DOCX resume.
+6. Enter the job description.
+7. Start the analysis.
+8. Wait for the AI analysis.
+9. View the resume match score.
+10. Review matching and missing skills.
+11. Read the strengths, weaknesses, and summary.
+12. Access previous analyses through the history section.
 
-### Recruiter Workflow
+---
+
+# 🧑‍💼 Recruiter Usage
+
+1. Open the application.
+2. Select **Recruiter**.
+3. Register or log in.
+4. Open the recruiter dashboard.
+5. Create a job posting.
+6. Enter the job description.
+7. Upload multiple candidate resumes.
+8. Start candidate analysis.
+9. View candidate match scores.
+10. Review matching and missing skills.
+11. Set a cutoff score.
+12. Review candidates based on the score.
+13. View recruitment history.
+
+---
+
+# 📊 Example Matching
+
+Suppose a job description requires:
 
 ```text
-1. Register as a recruiter.
-2. Login.
-3. Open recruiter dashboard.
-4. Create a job posting.
-5. Enter job title and description.
-6. Upload multiple candidate resumes.
-7. Set a cutoff score.
-8. Run candidate analysis.
-9. View ranked results.
-10. Review shortlisted and rejected candidates.
-11. Open recruitment history.
+Python
+Machine Learning
+SQL
+Flask
+Git
+```
+
+A candidate's resume contains:
+
+```text
+Python
+Machine Learning
+SQL
+Flask
+```
+
+The system may identify:
+
+```text
+Matching Skills:
+Python
+Machine Learning
+SQL
+Flask
+
+Missing Skills:
+Git
+```
+
+The final score is generated by the AI based on the retrieved resume information and job requirements.
+
+---
+
+# 🔒 Security Considerations
+
+The project includes basic security practices such as:
+
+- Password hashing
+- Session-based authentication
+- Role-based access
+- Secure filename handling
+- Environment variables for API keys
+- Protected recruiter routes
+
+For production deployment, additional security improvements are recommended:
+
+- CSRF protection
+- HTTPS
+- Stronger session configuration
+- File-size restrictions
+- File-content validation
+- Production database
+- Rate limiting
+- Secure deployment configuration
+
+---
+
+# ⚠️ Important Notes
+
+### Gemini API
+
+The application depends on Google Gemini APIs.
+
+API model availability, quotas, rate limits, and pricing may change.
+
+If a configured model is unavailable, the model name in the relevant service file may need to be updated.
+
+---
+
+### Resume Privacy
+
+Uploaded resumes may contain personal information.
+
+Do not upload real candidate resumes to a public GitHub repository.
+
+The following folders should generally not contain publicly committed personal data:
+
+```text
+uploads/
+chroma_db/
+instance/
 ```
 
 ---
 
-## 📊 Example AI Analysis Output
+### `.env`
 
-The application returns a structured result similar to:
+Never commit:
 
-```json
-{
-  "overall_score": 82.5,
-  "matching_skills": [
-    "Python",
-    "Flask",
-    "SQL",
-    "Machine Learning"
-  ],
-  "missing_skills": [
-    "Docker",
-    "AWS"
-  ],
-  "summary": "The candidate demonstrates good alignment with the role through relevant technical skills and project experience.",
-  "strengths": [
-    "Relevant programming experience",
-    "Project-based technical exposure",
-    "Strong alignment with required technologies"
-  ],
-  "weaknesses": [
-    "Limited evidence of cloud deployment",
-    "Some job requirements are not supported by the resume"
-  ]
-}
+```text
+.env
 ```
 
-> The above is an illustrative example of the output structure. Actual scores and skills depend on the uploaded resume, job description, and Gemini response.
+to GitHub.
+
+Your API key should remain private.
 
 ---
 
-## 🗃️ Database Design
+# 🚀 Future Enhancements
 
-The application uses SQLite with Flask-SQLAlchemy.
+Possible improvements include:
 
-### Main Tables
+- Candidate ranking
+- Advanced skill normalization
+- OCR support for scanned resumes
+- More document formats
+- Better resume section detection
+- Applicant AI doubt assistant
+- Email notifications
+- Advanced recruiter analytics
+- Candidate filtering
+- Production PostgreSQL database
+- Cloud deployment
+- Automated testing
+- Improved AI prompt evaluation
+- Resume recommendation system
+- Job recommendation based on resume
+- Skill-gap learning recommendations
+
+---
+
+# 📸 Screenshots
+
+Screenshots of the application can be added here.
+
+Example:
 
 ```text
-User
- │
- ├── AnalysisHistory
- │
- ├── JobPosting
- │      │
- │      └── RecruitmentSession
- │              │
- │              └── CandidateResult
+screenshots/
+├── home.png
+├── applicant-dashboard.png
+├── recruiter-dashboard.png
+├── resume-analysis.png
+└── recruitment-results.png
 ```
 
-### User Table
+Then they can be displayed in the README using:
 
-```text
-User
-├── id
-├── username
-├── email
-├── password_hash
-└── role
-```
-
-### Job Posting Table
-
-```text
-JobPosting
-├── id
-├── recruiter_id
-├── title
-├── company
-├── location
-├── employment_type
-├── job_description
-├── job_hash
-├── status
-└── created_at
-```
-
-### Analysis History Table
-
-```text
-AnalysisHistory
-├── id
-├── user_id
-├── resume_name
-├── resume_hash
-├── job_hash
-├── job_description
-├── match_score
-├── matching_skills
-├── missing_skills
-├── summary
-├── strengths
-├── weaknesses
-└── created_at
-```
-
-### Recruitment Session Table
-
-```text
-RecruitmentSession
-├── id
-├── recruiter_id
-├── job_id
-├── job_title
-├── job_description
-├── job_hash
-├── cutoff_score
-└── created_at
-```
-
-### Candidate Result Table
-
-```text
-CandidateResult
-├── id
-├── session_id
-├── candidate_name
-├── resume_hash
-├── job_hash
-├── match_score
-├── status
-├── matching_skills
-├── missing_skills
-├── summary
-├── strengths
-├── weaknesses
-└── created_at
+```markdown
+![Home Page](screenshots/home.png)
 ```
 
 ---
 
-## 🔄 Duplicate Analysis Handling
+# 👥 Team Members
 
-The project uses hashes to identify repeated resume/job combinations.
+This project was developed as a **group project**.
 
-For applicant analysis, the application calculates:
+### Team
 
-```text
-Resume Hash
-+
-Job Description Hash
-```
-
-If the same combination has already been analyzed for the same applicant, the application retrieves the saved result from SQLite.
-
-This helps avoid unnecessary repeated analysis requests.
-
-For recruiter candidate analysis, existing matching results can also be reused.
+- **Vasant Kumar**
+- **Vinod A**
+- **Vinuta Naik**
+- **Vishalakshi N R**
 
 ---
 
-## 📁 Data Storage
+# 🎓 Project Purpose
 
-### SQLite
+This project was developed as an academic/group project to demonstrate the practical application of:
 
-Stores:
-
-- Users.
-- Job postings.
-- Applicant analysis history.
-- Recruitment sessions.
-- Candidate results.
-
-### ChromaDB
-
-Stores:
-
-- Resume text chunks.
-- Embeddings.
-- Resume IDs.
-- Candidate names.
-- Resume section metadata.
-
-### Upload Folder
-
-Uploaded resumes are stored locally in the configured upload folder.
-
-### Environment File
-
-The `.env` file stores sensitive configuration such as the Gemini API key.
-
----
-
-## 🚀 Future Enhancements
-
-The current project provides a foundation for AI-assisted resume screening. Possible future improvements include:
-
-### AI Improvements
-
-- More advanced resume section detection.
-- Better skill normalization.
-- Improved job requirement extraction.
-- More consistent score calibration.
-- Resume recommendations and improvement suggestions.
-- Support for additional AI models.
-- Better handling of scanned resumes using OCR.
-
-### Applicant Improvements
-
-- Resume improvement suggestions.
-- ATS-style keyword analysis.
-- Resume version comparison.
-- Export analysis reports as PDF.
-- Skill-gap learning recommendations.
-- Dashboard analytics.
-
-### Recruiter Improvements
-
-- Candidate profile management.
-- Search and filter candidates.
-- Export shortlisted candidates.
-- Interview scheduling.
-- Candidate communication management.
-- Advanced recruitment analytics.
-- Role-based recruiter permissions.
-
-### Technical Improvements
-
-- Production deployment.
-- PostgreSQL support.
-- Cloud file storage.
-- Background task processing.
-- Automated testing.
-- Better error logging.
-- Database migrations.
-- Docker support.
-- CI/CD integration.
-
----
-
-## ⚠️ Limitations
-
-- Resume extraction currently supports PDF and DOCX files.
-- The application depends on the Gemini API for AI analysis and embeddings.
-- API quota and rate limits may affect analysis.
-- Match scores are AI-generated estimates, not validated hiring predictions.
-- The current project uses SQLite for local database storage.
-- Uploaded resumes are stored locally.
-- The application is currently configured for development use.
-- AI results may contain inaccuracies and should be reviewed.
-- A high score does not guarantee interview selection or employment.
-
----
-
-## 🔒 Responsible AI Disclaimer
-
-This project is intended as an educational and recruitment-assistance tool.
-
-AI-generated resume scores should not be treated as the sole basis for hiring decisions.
-
-Recruiters should independently review:
-
-- Candidate qualifications.
-- Relevant experience.
-- Technical skills.
-- Projects.
-- Communication skills.
-- Job requirements.
-- Candidate consent and privacy.
-
-The system should be improved and tested for fairness before being used in real-world automated hiring decisions.
-
----
-
-## 👨‍💻 Developer
-
-**Vasant Kumar**
-
-Computer Science and Engineering Student
-
-Aspiring Software Developer
-
-### Technical Interests
-
-- Java
 - Python
 - Flask
-- SQL
-- Artificial Intelligence
+- Machine Learning concepts
 - Generative AI
-- Web Development
-- Software Engineering
+- RAG
+- Semantic Search
+- Vector Databases
+- Embeddings
+- Natural Language Processing
+- Database Management
+- Web Application Development
+
+The project demonstrates how AI can be integrated into a real-world recruitment and resume-screening workflow.
 
 ---
 
-## 📚 Learning Outcomes
+# ⚖️ Disclaimer
 
-Through this project, the following concepts were explored:
+The AI-generated match scores, recommendations, and candidate insights are intended to assist users in resume analysis and recruitment workflows.
 
-- Python programming.
-- Flask web development.
-- REST-style application routing.
-- User authentication.
-- Password hashing.
-- SQLAlchemy ORM.
-- SQLite database management.
-- Resume text extraction.
-- Natural language processing concepts.
-- Semantic text chunking.
-- Vector embeddings.
-- ChromaDB vector search.
-- Google Gemini API integration.
-- Retrieval-Augmented Generation concepts.
-- JSON response processing.
-- Git and GitHub version control.
-- Environment variable security.
+They should **not be used as the sole basis for making employment decisions**. Human review and judgment should always be considered.
 
 ---
 
-## 📌 Project Status
+## ⭐ Acknowledgement
 
-```text
-Project Type: Academic / Personal Project
-Status: Active Development
-Application: Flask Web Application
-AI Provider: Google Gemini API
-Vector Database: ChromaDB
-Relational Database: SQLite
-```
+This project was developed collaboratively by the team as part of our learning and practical implementation of AI-powered application development.
 
----
+## 👥 Team Members
 
-## ⭐ Support
+This project was developed as a **group project** by:
 
-If you find this project useful, consider giving the repository a star ⭐
-
-Feedback and suggestions are welcome.
-
----
-
-<p align="center">
-  <b>Built with Python, Flask, Google Gemini, and ChromaDB.</b>
-</p>
+- **Vasant Kumar**
+- **Vinod A**
+- **Vinuta Naik**
+- **Vishalakshi N R**
