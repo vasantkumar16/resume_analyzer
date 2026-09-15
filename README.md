@@ -198,18 +198,20 @@ AI-Resume-Analyzer/
 ├── uploads/
 │   └── resumes/
 │
-├── chroma_db/
-│
 ├── screenshots/
-│   ├── home.png
-│   ├── applicant-dashboard.png
-│   ├── recruiter-dashboard.png
-│   ├── resume-analysis.png
-│   └── recruitment-results.png
+│   ├── applicant-dashboard.jpg
+│   ├── home.jpg
+│   ├── recruiter-dashboard.jpg
+│   ├── recruitment-results.jpg
+│   └── resume-analysis.jpg
+│
+├── chroma_db/
 │
 └── instance/
     └── resume_analyzer.db
 ```
+
+> Update the project structure if your actual GitHub repository uses different file or folder names.
 
 ---
 
@@ -604,13 +606,13 @@ It can contain:
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-GITHUB-USERNAME/AI-Resume-Analyzer.git
+git clone https://github.com/vasantkumar16/resume_analyzer.git
 ```
 
 Move into the project directory:
 
 ```bash
-cd AI-Resume-Analyzer
+cd resume_analyzer
 ```
 
 ---
@@ -862,35 +864,33 @@ Possible improvements include:
 
 # 📸 Screenshots
 
-The following screenshots demonstrate the main features and interfaces of the **AI Resume Analyzer**.
-
 ### 🏠 Home Page
 
-![AI Resume Analyzer Home Page](screenshots/home.png)
+![AI Resume Analyzer Home Page](screenshots/home.jpg)
 
 ---
 
 ### 👤 Applicant Dashboard
 
-![Applicant Dashboard](screenshots/applicant-dashboard.png)
+![Applicant Dashboard](screenshots/applicant-dashboard.jpg)
 
 ---
 
 ### 🧑‍💼 Recruiter Dashboard
 
-![Recruiter Dashboard](screenshots/recruiter-dashboard.png)
+![Recruiter Dashboard](screenshots/recruiter-dashboard.jpg)
 
 ---
 
 ### 📄 Resume Analysis
 
-![Resume Analysis](screenshots/resume-analysis.png)
+![Resume Analysis](screenshots/resume-analysis.jpg)
 
 ---
 
 ### 📊 Recruitment Results
 
-![Recruitment Results](screenshots/recruitment-results.png)
+![Recruitment Results](screenshots/recruitment-results.jpg)
 
 ---
 
